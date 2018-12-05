@@ -42,6 +42,8 @@ Set host, port, password, and cluster mode in the workload you plan to run.
 - `redis.cluster`
   * Set the cluster parameter to `true` if redis cluster mode is enabled.
   * Default is `false`.
+- `redis.usestrings`
+  * Set the usestrings parameter to `true` if you want to use get/set rather than hget/hset
 
 Or, you can set configs with the shell command, EG:
 
