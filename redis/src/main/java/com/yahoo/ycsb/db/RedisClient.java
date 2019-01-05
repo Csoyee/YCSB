@@ -72,6 +72,7 @@ public class RedisClient extends DB {
   public static final String PASSWORD_PROPERTY = "redis.password";
   public static final String CLUSTER_PROPERTY = "redis.cluster";
   public static final String USE_STRINGS_PROPERTY = "redis.usestrings";
+  public static final String TIMEOUT_PROPERTY = "redis.timeout";
   protected static final ObjectMapper MAPPER = new ObjectMapper();
 
   public static final boolean USE_STRINGS_DEFAULT = false;
@@ -81,6 +82,7 @@ public class RedisClient extends DB {
   public void init() throws DBException {
     Properties props = getProperties();
     int port;
+    int timeout;
 
     String portString = props.getProperty(PORT_PROPERTY);
     if (portString != null) {
@@ -91,12 +93,18 @@ public class RedisClient extends DB {
     String host = props.getProperty(HOST_PROPERTY);
 
     boolean clusterEnabled = Boolean.parseBoolean(props.getProperty(CLUSTER_PROPERTY));
+    String timeoutString = props.getProperty(TIMEOUT_PROPERTY);
     if (clusterEnabled) {
       Set<HostAndPort> jedisClusterNodes = new HashSet<>();
       jedisClusterNodes.add(new HostAndPort(host, port));
       jedis = new JedisCluster(jedisClusterNodes);
     } else {
-      jedis = new Jedis(host, port);
+      if (timeoutString != null) {
+      	timeout = Integer.parseInt(timeoutString);
+      } else {
+      	timeout = 60000;
+      }
+      jedis = new Jedis(host, timeout);
       ((Jedis) jedis).connect();
     }
     String password = props.getProperty(PASSWORD_PROPERTY);
