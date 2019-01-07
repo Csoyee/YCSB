@@ -45,7 +45,7 @@ Set host, port, password, and cluster mode in the workload you plan to run.
 - `redis.usestrings`
   * Set the usestrings parameter to `true` if you want to use get/set rather than hget/hset
 - `redis.timeout`
-  * Set redis insert, read timeout value (unit: milisecond)
+  * Set redis insert, read timeout value (unit: millisecond)
 
 Or, you can set configs with the shell command, EG:
 
