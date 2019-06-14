@@ -33,6 +33,8 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import java.lang.Integer.*;
+
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
@@ -43,6 +45,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class RocksDBClient extends DB {
 
   static final String PROPERTY_ROCKSDB_DIR = "rocksdb.dir";
+  static final String PROPERTY_ROCKSDB_COMP_THREAD = "rocksdb.comp";
   private static final String COLUMN_FAMILY_NAMES_FILENAME = "CF_NAMES";
 
   private static final Logger LOGGER = LoggerFactory.getLogger(RocksDBClient.class);
@@ -58,12 +61,18 @@ public class RocksDBClient extends DB {
   @Override
   public void init() throws DBException {
     synchronized(RocksDBClient.class) {
+      int compThread = 0;
+      String compThreadString = getProperties().getProperty(PROPERTY_ROCKSDB_COMP_THREAD);
       if(rocksDb == null) {
         rocksDbDir = Paths.get(getProperties().getProperty(PROPERTY_ROCKSDB_DIR));
         LOGGER.info("RocksDB data dir: " + rocksDbDir);
 
+        if(compThreadString != null) {
+          compThread = Integer.parseInt(compThreadString);
+        }
+
         try {
-          rocksDb = initRocksDB();
+          rocksDb = initRocksDB(compThread);
         } catch (final IOException | RocksDBException e) {
           throw new DBException(e);
         }
@@ -80,7 +89,7 @@ public class RocksDBClient extends DB {
    *
    * @return The initialized and open RocksDB instance.
    */
-  private RocksDB initRocksDB() throws IOException, RocksDBException {
+  private RocksDB initRocksDB(int compThread) throws IOException, RocksDBException {
     if(!Files.exists(rocksDbDir)) {
       Files.createDirectories(rocksDbDir);
     }
@@ -99,8 +108,12 @@ public class RocksDBClient extends DB {
       cfOptionss.add(cfOptions);
       cfDescriptors.add(cfDescriptor);
     }
+    
+    int rocksThreads = Runtime.getRuntime().availableProcessors() * 2;
 
-    final int rocksThreads = Runtime.getRuntime().availableProcessors() * 2;
+    if(compThread != 0) {
+      rocksThreads = compThread;
+    }
 
     if(cfDescriptors.isEmpty()) {
       final Options options = new Options()

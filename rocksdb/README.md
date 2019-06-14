@@ -38,6 +38,13 @@ Then, run the workload:
 
     ./bin/ycsb run rocksdb -s -P workloads/workloada -p rocksdb.dir=/tmp/ycsb-rocksdb-data
 
+### 3. Provide RocksDB Connection Parameters
+
+Connection Parameters Added
+
+- `rocksdb.comp`
+  * Set rocksdb background compaction threads
+
 ## RocksDB Configuration Parameters
 
 * ```rocksdb.dir``` - (required) A path to a folder to hold the RocksDB data files.
