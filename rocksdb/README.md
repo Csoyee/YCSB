@@ -50,4 +50,4 @@ Connection Parameters Added
 * ```rocksdb.dir``` - (required) A path to a folder to hold the RocksDB data files.
     * EX. ```/tmp/ycsb-rocksdb-data```
 
-* for additional configuration, refer to [java configuration interface](https://github.com/facebook/rocksdb/blob/master/java/src/main/java/org/rocksdb/DBOptionsInterface.java)
+* for additional configuration, refer to [java configuration interface](https://github.com/facebook/rocksdb/blob/master/java/src/main/java/org/rocksdb/DBOptionsInterface.java) / [java db option](https://github.com/facebook/rocksdb/blob/master/java/src/main/java/org/rocksdb/DBOptions.java)
