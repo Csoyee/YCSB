@@ -123,7 +123,9 @@ public class RocksDBClient extends DB {
           .setIncreaseParallelism(rocksThreads)
           .setMaxBackgroundCompactions(rocksThreads)
           .setStatsDumpPeriodSec(60)
-          .setInfoLogLevel(InfoLogLevel.INFO_LEVEL);
+          .setInfoLogLevel(InfoLogLevel.INFO_LEVEL)
+          .setMaxOpenFiles(4096)
+          .setDbLogDir("/home/csoyee/log/rocksdbLOG/");
       dbOptions = options;
       return RocksDB.open(options, rocksDbDir.toAbsolutePath().toString());
     } else {
@@ -133,7 +135,9 @@ public class RocksDBClient extends DB {
           .setIncreaseParallelism(rocksThreads)
           .setMaxBackgroundCompactions(rocksThreads)
           .setStatsDumpPeriodSec(60)
-          .setInfoLogLevel(InfoLogLevel.INFO_LEVEL);
+          .setInfoLogLevel(InfoLogLevel.INFO_LEVEL)
+          .setMaxOpenFiles(4096)
+          .setDbLogDir("/home/csoyee/log/rocksdbLOG/");
       dbOptions = options;
 
       final List<ColumnFamilyHandle> cfHandles = new ArrayList<>();
