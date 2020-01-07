@@ -51,3 +51,16 @@ Connection Parameters Added
     * EX. ```/tmp/ycsb-rocksdb-data```
 
 * for additional configuration, refer to [java configuration interface](https://github.com/facebook/rocksdb/blob/master/java/src/main/java/org/rocksdb/DBOptionsInterface.java) / [java db option](https://github.com/facebook/rocksdb/blob/master/java/src/main/java/org/rocksdb/DBOptions.java) / [java column family option](https://github.com/facebook/rocksdb/blob/master/java/src/main/java/org/rocksdb/ColumnFamilyOptions.java)
+
+### 내가 사용한 옵션들
+```bash
+# DBOptions
+.setWritableFileMaxBufferSize("buffer size in byte") // buffer 사이즈 조정
+.setStatsDumpPeriodSec("time in second") // log dump 하는 시간 간격
+.setDbLogDir("$PATH")                    // log path
+.setMaxBackgroundCompactions("# of compaction thread")  // 최대 compaction thread 개수 조정
+.setUseDirectIoForFlushAndCompaction("T/F")  // direct IO 사용 여부
+
+# ColumnFamilyOptions
+.setTargetFileSizeBase("target file size in byte")   // SST 파일 사이즈 조정
+```
